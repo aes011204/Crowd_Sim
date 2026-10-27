@@ -1,13 +1,11 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.AI;
 
-//ÀÌ Component¸¦ »ç¿ëÇÏ·Á¸é NavMeshAgent°¡ ¹İµå½Ã ÇÊ¿äÇÏ´Ù°í ¸í½Ã
-//Unity¿¡¼­ Component³¢¸® ÀÇÁ¸¼ºÀ» ´Ù·ç´Â ¹æ½Ä Áß ÇÏ³ª
+//ì´ Componentë¥¼ ì‚¬ìš©í•˜ë ¤ë©´ NavMeshAgentê°€ ë°˜ë“œì‹œ í•„ìš”í•˜ë‹¤ê³  ëª…ì‹œ
+//Unityì—ì„œ Componentë¼ë¦¬ ì˜ì¡´ì„±ì„ ë‹¤ë£¨ëŠ” ë°©ì‹ ì¤‘ í•˜ë‚˜
 [RequireComponent(typeof(NavMeshAgent))]
 public class NPCMovement : MonoBehaviour
 {
-    [SerializeField]
-    private Transform destination;
 
     private NavMeshAgent agent;
 
@@ -15,14 +13,27 @@ public class NPCMovement : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
     }
-    void Start()
+    //void Start()
+    //{
+    //    agent.SetDestination(destination.position); // ì´ê±° í•˜ë©´ NavMeshAgent ìì²´ê°€ ê³„ì† ëª©ì ì§€ë¥¼ í–¥í•´ ì´ë™
+    //}
+
+    public void MoveTo(Vector3 destination)
     {
-        agent.SetDestination(destination.position); // ÀÌ°Å ÇÏ¸é NavMeshAgent ÀÚÃ¼°¡ °è¼Ó ¸ñÀûÁö¸¦ ÇâÇØ ÀÌµ¿
+        agent.SetDestination(destination);
     }
 
+    public bool HasArrived()
+    {
+        if (agent == null)
+            return false;
 
+        if(!agent.hasPath||agent.pathStatus != NavMeshPathStatus.PathComplete) return false;
+
+        return agent.remainingDistance <= agent.stoppingDistance + 0.05f;
+    }
     //void Update()
     //{
-    // 100~1000°³ ¸¸µé°Å¶ó È£ÃâÇÒ ´ë»óÀÌ ´Ã¾î³¯ ¼ö ÀÖ¾î.ºó ÇÔ¼ö´Ï±î ³»ºÎ ¿¬»êÀº ¾øÁö¸¸ È£Ãâ ÀÚÃ¼ÀÇ °ü¸® ºñ¿ëÀÌ ÀÖÀ½
+    // 100~1000ê°œ ë§Œë“¤ê±°ë¼ í˜¸ì¶œí•  ëŒ€ìƒì´ ëŠ˜ì–´ë‚  ìˆ˜ ìˆì–´.ë¹ˆ í•¨ìˆ˜ë‹ˆê¹Œ ë‚´ë¶€ ì—°ì‚°ì€ ì—†ì§€ë§Œ í˜¸ì¶œ ìì²´ì˜ ê´€ë¦¬ ë¹„ìš©ì´ ìˆìŒ
     //}
 }
